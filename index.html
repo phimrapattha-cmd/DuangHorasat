@@ -1,0 +1,327 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ดวงรายเดือน ๓ ศาสตร์</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Trirong:wght@500;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
+<style>
+/* Layout: one column of "folios" — form, monthly ledger, then the three working charts (7-number table, life graph, Taksa timeline) */
+:root{
+  --bg:#eef0f6; --surface:#ffffff; --ink:#1b2340; --muted:#5d6584; --line:#d6dae8;
+  --gold:#a8790c; --gold-soft:#f4ead2; --indigo:#2f3f86;
+  --good:#1f7a4d; --good-soft:#dcefe4; --ok:#2f6a9a; --ok-soft:#dde9f4;
+  --mid:#8a6a12; --mid-soft:#f3ead0; --bad:#a83a32; --bad-soft:#f5dfdc;
+  --f-display:"Trirong","Noto Serif Thai",Georgia,serif;
+  --f-body:"IBM Plex Sans Thai","Sarabun","Leelawadee UI",Tahoma,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#11152a; --surface:#1a2038; --ink:#e6e8f3; --muted:#9aa1bf; --line:#2d3556;
+  --gold:#e0b44a; --gold-soft:#3a3220; --indigo:#9fb0f5;
+  --good:#5fc893; --good-soft:#1c3a2c; --ok:#79b2e3; --ok-soft:#1d3047;
+  --mid:#e0b44a; --mid-soft:#3a3220; --bad:#ec8a80; --bad-soft:#43231f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11152a; --surface:#1a2038; --ink:#e6e8f3; --muted:#9aa1bf; --line:#2d3556;
+  --gold:#e0b44a; --gold-soft:#3a3220; --indigo:#9fb0f5;
+  --good:#5fc893; --good-soft:#1c3a2c; --ok:#79b2e3; --ok-soft:#1d3047;
+  --mid:#e0b44a; --mid-soft:#3a3220; --bad:#ec8a80; --bad-soft:#43231f; color-scheme:dark}
+*{box-sizing:border-box} body{margin:0} [hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+h1,h2,h3,h4{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.25}
+h1{font-size:clamp(26px,6vw,36px)}
+h2{font-size:21px}
+.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--gold);font-weight:600}
+.lead{color:var(--muted);margin:6px 0 0;max-width:62ch}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.sec-head{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.sec-head p{margin:0;color:var(--muted);font-size:13.5px;max-width:65ch}
+form{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;align-items:end}
+label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:500}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 10px;min-width:0;width:100%}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+button{font:inherit;font-weight:600;background:var(--indigo);color:var(--surface);border:0;border-radius:9px;padding:10px 14px;cursor:pointer}
+.note{grid-column:1/-1;font-size:12.5px;color:var(--muted);margin:0}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.fact{border-left:3px solid var(--gold);padding:2px 0 2px 10px}
+.fact b{display:block;font-family:var(--f-display);font-size:17px}
+.fact span{font-size:12px;color:var(--muted)}
+.months{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,400px),1fr));gap:14px}
+.mo{border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;background:var(--surface);min-width:0}
+.mo-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.mo-top h3{font-size:19px}
+.score{font-variant-numeric:tabular-nums;font-weight:600;font-size:14px}
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:1px 9px;border-radius:99px;white-space:nowrap}
+.lv-a{color:var(--good);background:var(--good-soft)} .lv-b{color:var(--ok);background:var(--ok-soft)}
+.lv-c{color:var(--mid);background:var(--mid-soft)} .lv-d{color:var(--bad);background:var(--bad-soft)}
+.over{margin:0;font-size:14px}
+.doms{display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:10px}
+.dom h4{font-family:var(--f-body);font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.dom h4 .by{font-weight:400;color:var(--muted);font-size:12px}
+.dom p{margin:2px 0 0;font-size:13.5px}
+.dom .tip{color:var(--muted);font-size:12.5px}
+.dom .tip b{color:var(--gold);font-weight:600}
+.lucky{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px}
+.lucky b{color:var(--ink);font-weight:600}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;font-variant-numeric:tabular-nums;width:100%;min-width:520px;font-size:13px}
+th,td{border:1px solid var(--line);padding:6px 4px;text-align:center}
+th{font-weight:500;color:var(--muted);background:var(--bg)}
+td.num{font-family:var(--f-display);font-size:18px;font-weight:700}
+td.hl{background:var(--gold-soft)}
+.house{display:block;font-size:11px;color:var(--muted);line-height:1.3}
+svg text{font-family:var(--f-body)}
+.tl{display:flex;flex-direction:column;gap:6px}
+.tl-row{display:grid;grid-template-columns:5.5em 1fr;gap:10px;align-items:center;font-size:13.5px}
+.tl-row .yrs{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12.5px}
+.tl-row.now{font-weight:600}
+.tl-row.now .yrs{color:var(--gold)}
+.disc{font-size:12.5px;color:var(--muted);text-align:center;margin:0}
+.sample{font-size:12px;color:var(--gold);font-weight:600}
+@media (prefers-reduced-motion:no-preference){.bar i{transition:width .5s ease}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">เลข ๗ ตัว · กราฟชีวิตเลข ๑๒ ตัว · มหาทักษา</div>
+    <h1>ดวงรายเดือน ๓ ศาสตร์</h1>
+    <p class="lead">กรอกวันเดือนปีและเวลาเกิด เลือกสถานะความรักและปีที่อยากดู โปรแกรมผูกดวงตามสูตรตำราแบบย่อ แล้วทำนายรายเดือนครบ 12 เดือน</p>
+  </header>
+
+  <section class="panel">
+    <form id="f">
+      <label for="d">วันที่เกิด<select id="d"></select></label>
+      <label for="m">เดือนเกิด<select id="m"></select></label>
+      <label for="y">ปีเกิด (พ.ศ.)<input id="y" type="number" min="2440" max="2600" inputmode="numeric"></label>
+      <label for="t">เวลาเกิด<input id="t" type="time"></label>
+      <label for="st">สถานะความรัก<select id="st"><option value="single">โสด</option><option value="couple">มีคนรักแล้ว</option></select></label>
+      <label for="ty">ปีที่ดู (พ.ศ.)<input id="ty" type="number" min="2500" max="2650" inputmode="numeric"></label>
+      <button type="submit" id="go">ผูกดวง</button>
+      <p class="note">ไม่ทราบเวลาเกิด ใส่ 12:00 ได้ · เกิดก่อน 06:00 นับเป็นวันก่อนหน้าตามหลักไทย · <span id="sampleTag" class="sample">ข้อมูลตัวอย่าง</span></p>
+    </form>
+  </section>
+
+  <section class="panel">
+    <div class="facts" id="facts"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2 id="moTitle">ดวงรายเดือน</h2>
+      <p>คะแนนรวม = เลข 7 ตัว (40%) + ดาวแทรกมหาทักษา (35%) + ดาวเสวย (15%) + กราฟชีวิตปีนั้น (10%) · แต่ละเรื่องอ่านจากเรือนของตัวเองในผังเลข 7 ตัว</p></div>
+    <div class="panel" style="margin-bottom:14px"><div id="moChart"></div></div>
+    <div class="months" id="months"></div>
+  </section>
+
+  <section class="panel">
+    <div class="sec-head"><h2>ผังเลข ๗ ตัว ๔ ฐาน</h2>
+      <p>ฐานวัน ฐานเดือน ฐานปี แล้วรวมเป็นฐานที่ 4 · ช่องสีทองคือเรือนที่ดวงจรเดินผ่านในเดือนนี้ของปีที่ดู</p></div>
+    <div class="scroll"><table id="t7"></table></div>
+  </section>
+
+  <section class="panel">
+    <div class="sec-head"><h2>กราฟชีวิตเลข ๑๒ ตัว</h2>
+      <p>ระดับตามสูตรตำรา วนซ้ำทุก 12 ปี จุดสีทองคืออายุในปีที่ดู</p></div>
+    <div class="scroll"><div id="lg" style="min-width:520px"></div></div>
+  </section>
+
+  <section class="panel">
+    <div class="sec-head"><h2>มหาทักษา · ดาวเสวยอายุ</h2>
+      <p>ดาวเสวยวนครบรอบ 108 ปี เริ่มจากดาวประจำวันเกิด แถวตัวหนาคือช่วงที่ครอบคลุมปีที่ดู</p></div>
+    <div class="tl" id="tl"></div>
+  </section>
+
+  <p class="disc">คำนวณตามสูตรตำราแบบย่อ เดือนจันทรคติใช้ค่าประมาณ ผลอาจต่างจากเว็บที่ใช้ปฏิทินดาราศาสตร์จริง · เพื่อความบันเทิง ไม่ใช่การพยากรณ์ทางวิทยาศาสตร์</p>
+</div>
+
+<script>
+(function(){
+const TH_MONTH=["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
+const TH_MON_S=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+const DAY=["","อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์","พุธกลางคืน"];
+const PLANET=["","อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์","ราหู"];
+const COLOR=["","แดง","เหลือง ครีม","ชมพู","เขียว","ส้ม","ฟ้า น้ำเงิน","ม่วง","เทา"];
+const ANIMAL=["ชวด","ฉลู","ขาล","เถาะ","มะโรง","มะเส็ง","มะเมีย","มะแม","วอก","ระกา","จอ","กุน"];
+const LUNAR=["อ้าย","ยี่","3","4","5","6","7","8","9","10","11","12"];
+const thNum=n=>String(n).split("").map(c=>"๐๑๒๓๔๕๖๗๘๙"[c]??c).join("");
+const H1=["อัตตะ","หินะ","ธนัง","ปิตา","มาตา","โภคา","มัชฌิมา"];
+const H2=["ตะนุ","กดุมภะ","สหัชชะ","พันธุ","ปุตตะ","อริ","ปัตนิ"];
+const H3=["มรณะ","สุภะ","กัมมะ","ลาภะ","พยายะ","ทาสา","ทาสี"];
+const FOCUS=["ตัวเองและสุขภาพ","รายจ่ายและเรื่องกังวล","การงานและพี่น้อง","ผู้ใหญ่และลาภ","ครอบครัวและบริวาร","ทรัพย์สินและคู่แข่ง","คู่ครองและหุ้นส่วน"];
+const Q={1:.45,2:.7,3:.35,4:.65,5:.85,6:.8,7:.3,8:.25};
+const KW={1:"เกียรติ อำนาจ ผู้ใหญ่",2:"เสน่ห์ ความอ่อนโยน",3:"ความกล้า การแข่งขัน",4:"การเจรจา การค้า",5:"ปัญญา ผู้อุปถัมภ์",6:"โชคลาภ ความสุข",7:"ความหนัก ความอดทน",8:"ความเปลี่ยนแปลง เรื่องไม่คาดคิด"};
+/* [good, caution] per planet */
+const WORK={
+1:["ผู้ใหญ่และหัวหน้าเห็นฝีมือ มีโอกาสได้รับงานสำคัญหรือได้นำทีม งานที่ใช้ภาวะผู้นำจะเด่น","มีเกณฑ์ขัดแย้งกับหัวหน้าหรือผู้มีอำนาจ ความมั่นใจที่มากไปอาจถูกมองว่าข่มคนอื่น ควรเลือกคำพูดและให้เครดิตทีม"],
+2:["งานที่ต้องประสานคนไปได้ราบรื่น มีเพื่อนร่วมงานคอยช่วย เหมาะงานบริการและดูแลลูกค้า","ใจไม่นิ่ง เปลี่ยนแผนบ่อย งานจึงคืบช้า ระวังรับปากหลายเรื่องจนทำไม่ทัน"],
+3:["พลังลุยงานสูง งานค้างเคลียร์ได้เร็ว เหมาะเริ่มโปรเจกต์ที่ต้องแข่งขันหรือต้องกล้าตัดสินใจ","มีคู่แข่งหรือคนขัดขวาง เกิดการกระทบกระทั่งในทีม ระวังตัดสินใจตอนอารมณ์ร้อน"],
+4:["เด่นด้านเจรจา ติดต่อประสานงาน และเอกสาร การนำเสนองานหรือปิดดีลมีโอกาสสำเร็จ","ระวังเอกสารผิดพลาดและการสื่อสารคลาดเคลื่อน ตรวจทานอีเมลและสัญญาก่อนส่งทุกครั้ง"],
+5:["มีผู้ใหญ่หรือที่ปรึกษาสนับสนุน เหมาะเรียนต่อ สอบ อบรม หรือขอเลื่อนตำแหน่ง งานที่ใช้ความรู้ได้รับการยอมรับ","งานติดขั้นตอนอนุมัติ ต้องรอผู้ใหญ่ตัดสินใจ อย่าเร่งจนข้ามขั้นตอน"],
+6:["งานสร้างสรรค์ งานออกแบบ งานบันเทิงและความงามไปได้ดี บรรยากาศการทำงานผ่อนคลาย มีคนเอ็นดู","สมาธิหลุดง่าย ติดความสบาย มีเกณฑ์ผัดวันประกันพรุ่ง ควรตั้งเส้นตายให้ตัวเอง"],
+7:["งานหนักแต่ให้ผลระยะยาว เหมาะวางระบบหรือทำงานที่ต้องใช้ความอดทน ผลงานจะค่อยๆ ปรากฏ","งานล่าช้า ภาระงานล้นมือ รู้สึกเหนื่อยและไม่ได้รับการเห็นคุณค่า ควรจัดลำดับความสำคัญ"]};
+const MONEY={
+1:["รายได้มาจากตำแหน่งหน้าที่ มีโอกาสได้ค่าตอบแทนเพิ่มจากงานที่ได้รับมอบหมาย","มีรายจ่ายเพื่อหน้าตาและสังคม เช่น เลี้ยงคน ซื้อของแบรนด์ ควรตั้งงบไว้ก่อน"],
+2:["รายรับเข้ามาสม่ำเสมอ มีเงินจากงานบริการหรือขายของเล็กๆ น้อยๆ พอเก็บออมได้","ใช้เงินตามอารมณ์ ช้อปเพื่อคลายเครียด เงินรั่วไหลแบบไม่รู้ตัว"],
+3:["หาเงินได้จากความขยันและการลงมือเร็ว งานเสริมหรือจ็อบพิเศษให้ผลดี","มีรายจ่ายฉุกเฉิน เช่น ซ่อมรถ ซ่อมบ้าน ค่ารักษา ควรมีเงินสำรอง"],
+4:["รายได้จากการค้าขาย ต่อรองได้ราคาดี เหมาะขายของออนไลน์","ระวังถูกหว่านล้อมให้ซื้อหรือลงทุน อ่านเงื่อนไขให้ครบก่อนเซ็น"],
+5:["การเงินมั่นคง เหมาะวางแผนออม ลงทุนระยะยาว หรือเริ่มทำประกัน","ใจดีเกินไป มีคนมาขอยืมเงิน ถ้าไม่พร้อมควรปฏิเสธอย่างสุภาพ"],
+6:["มีโชคด้านการเงิน มีรายได้พิเศษหรือของขวัญเข้ามา งานด้านความงามสร้างรายได้ดี","ฟุ่มเฟือยกับความสุข ท่องเที่ยว กินดื่ม แต่งตัว ควรแบ่งเงินออมก่อนใช้"],
+7:["เงินเข้าช้าแต่มั่นคง ค่อยๆ สะสมได้ เหมาะปลดหนี้หรือวางแผนระยะยาว","รายได้ฝืด เงินเข้าช้ากว่ากำหนด ใช้จ่ายให้รัดกุม เลี่ยงการก่อหนี้ใหม่"]};
+const HEALTH={
+1:["พลังกายดี กระฉับกระเฉง เหมาะเริ่มออกกำลังกาย","ระวังความเครียดสะสม ความดัน ปวดศีรษะ และสายตาล้าจากงานหนัก"],
+2:["อารมณ์ดี นอนหลับได้ดี ร่างกายฟื้นตัวเร็ว","พักผ่อนน้อย อารมณ์แปรปรวน ดูแลกระเพาะและการดื่มน้ำ"],
+3:["ร่างกายแข็งแรง เหมาะกีฬาที่ใช้แรง","ระวังอุบัติเหตุ ของมีคม ความร้อน และการอักเสบ ขับรถให้ระมัดระวัง"],
+4:["สุขภาพปกติดี สมองแล่น","ดูแลระบบหายใจ ภูมิแพ้ ผิวหนัง และความเครียดจากการคิดมาก"],
+5:["แข็งแรง ภูมิต้านทานดี","ระวังน้ำหนักขึ้น ไขมันในเลือด และตับ จากการกินมากเกินไป"],
+6:["สดชื่น ผิวพรรณดี อารมณ์ดี","ระวังกินดื่มเกินพอดี น้ำตาล แอลกอฮอล์ และระบบปัสสาวะ"],
+7:["ร่างกายทนทาน ทำงานต่อเนื่องได้","ปวดเมื่อย ออฟฟิศซินโดรม กระดูก ข้อ ฟัน ควรยืดเหยียดบ่อยๆ"]};
+const LOVE={single:{
+1:["มีคนที่มีฐานะหรือตำแหน่งดีเข้ามาสนใจ งานเลี้ยงหรือที่ทำงานเป็นแหล่งพบคนใหม่","ความมั่นใจสูงจนดูเข้าถึงยาก ลองเปิดใจและลดมาตรฐานบางข้อลง"],
+2:["เสน่ห์แรง มีคนเข้ามาทักคุย คนรู้จักเก่าอาจกลับมาติดต่อ","อ่อนไหวง่าย คิดไปเองว่าเขาสนใจ ดูความจริงใจให้ชัดก่อน"],
+3:["กล้าเข้าหาคนที่ชอบ การเป็นฝ่ายเริ่มก่อนให้ผลดี","รีบร้อนจนอีกฝ่ายตั้งตัวไม่ทัน หรือเจอคนร้อนแรงแต่ไม่ยั่งยืน"],
+4:["คุยถูกคอกับคนใหม่ผ่านแชต โซเชียล หรือจากงาน","คุยหลายคนพร้อมกันจนสับสน หรือถูกเข้าใจผิดจากคำพูด"],
+5:["มีโอกาสเจอคนดีที่จริงจัง ผู้ใหญ่อาจแนะนำให้รู้จัก","มองหาคนสมบูรณ์แบบเกินไป จนพลาดคนที่เหมาะ"],
+6:["ความรักเด่นมาก มีคนเข้ามาจีบ เหมาะออกงานสังคม","หลงเสน่ห์ภายนอกง่าย ระวังคนที่มาเพื่อความสนุกชั่วคราว"],
+7:["ความรักค่อยเป็นค่อยไป อาจเริ่มจากเพื่อนหรือคนวัยต่างกัน","เหงา ไม่ค่อยมีโอกาสพบคนใหม่ ลองออกไปทำกิจกรรมใหม่ๆ"]},
+couple:{
+1:["คนรักให้เกียรติและพึ่งพาได้ เหมาะคุยเรื่องอนาคตร่วมกัน","ระวังความเอาแต่ใจหรือการแข่งกันเป็นใหญ่ ควรฟังอีกฝ่ายให้มากขึ้น"],
+2:["ความรักหวาน ดูแลกันดี เหมาะใช้เวลาด้วยกันที่บ้าน","น้อยใจง่าย ต้องการความใส่ใจมากกว่าปกติ ควรบอกความรู้สึกตรงๆ"],
+3:["ความสัมพันธ์มีสีสัน ทำกิจกรรมผจญภัยด้วยกันจะสนิทขึ้น","ใจร้อนทั้งคู่ ทะเลาะเรื่องเล็กง่าย พักก่อนพูดเมื่อโกรธ"],
+4:["คุยกันเข้าใจ ปรับความเข้าใจเรื่องที่ค้างคาได้","ข้อความหรือคำพูดทำให้เข้าใจผิด ควรคุยต่อหน้ามากกว่าทางแชต"],
+5:["ความสัมพันธ์มั่นคง เหมาะหมั้น แต่งงาน หรือพบครอบครัวอีกฝ่าย","ความคิดต่างเรื่องหลักการหรือครอบครัว ต้องเปิดใจฟังกัน"],
+6:["หวานชื่น มีโอกาสได้ไปเที่ยวด้วยกัน ความรักสดใส","ระวังคนภายนอกเข้ามาทำให้หวั่นไหว หรือใช้เงินเพื่อความสุขจนเครียด"],
+7:["ความรักมั่นคงแบบเรียบๆ ผ่านปัญหาไปได้ด้วยความอดทน","ห่างเหิน งานยุ่งจนไม่มีเวลาให้กัน ควรนัดเวลาพิเศษ"]}};
+const TIPS={
+work:[["เสนอไอเดียหรือขอโอกาสใหม่","นัดคุยกับคนในวงการ ขยายเครือข่าย","เริ่มงานสำคัญที่เลื่อนไว้"],["ทำงานให้เสร็จทีละชิ้น อย่ารับงานเพิ่ม","ทำข้อตกลงเป็นลายลักษณ์อักษร","ชะลอการตัดสินใจใหญ่ เช่น ลาออก ย้ายงาน"]],
+money:[["แบ่งรายได้พิเศษไปออมทันที","ทบทวนเป้าหมายการออมและการลงทุน","เหมาะเจรจาขอขึ้นราคาหรือค่าจ้าง"],["งดซื้อของชิ้นใหญ่ที่ไม่จำเป็น","เลี่ยงการค้ำประกันและให้ยืม","จดรายรับรายจ่ายทุกวัน"]],
+love:[["ใช้เวลาคุณภาพหรือออกไปพบคนใหม่","บอกความรู้สึกออกไปตรงๆ","เหมาะทำเรื่องสำคัญของความสัมพันธ์"],["ฟังให้มากกว่าพูด","อย่าตัดสินใจเรื่องความรักตอนอารมณ์ไม่ดี","ให้พื้นที่ส่วนตัวกันบ้าง"]],
+health:[["เริ่มกิจวัตรออกกำลังกายใหม่","เหมาะตรวจสุขภาพประจำปี","ดูแลต่อเนื่องอย่างที่ทำอยู่"],["นอนให้ครบ 7 ชั่วโมง","ลดของหวาน ของมัน และแอลกอฮอล์","ถ้าไม่สบายควรพบแพทย์ อย่าฝืน"]]};
+const PERIOD=["ต้นเดือน","กลางเดือน","ปลายเดือน"];
+// each domain reads its own house column; the month's transit shifts which column it lands on
+const DOM=[{k:"work",n:"การงาน",h:2},{k:"money",n:"การเงิน",h:3},{k:"love",n:"ความรัก",h:6},{k:"health",n:"สุขภาพ",h:0}];
+const TAKSA_ORDER=[1,2,3,4,7,5,8,6];
+const TAKSA_YRS={1:6,2:15,3:8,4:17,7:10,5:19,8:12,6:21};
+const YEAR_MS=365.2425*864e5;
+const $=id=>document.getElementById(id);
+
+for(let i=1;i<=31;i++)$("d").add(new Option(i,i));
+TH_MONTH.forEach((n,i)=>$("m").add(new Option(n,i+1)));
+
+const SAMPLE={d:15,m:6,y:2533,t:"08:30",st:"single",ty:2570};
+let saved=null;
+try{saved=JSON.parse(localStorage.getItem("duang3")||"null")}catch(e){}
+const init=Object.assign({},SAMPLE,saved||{});
+["d","m","y","t","st","ty"].forEach(k=>$(k).value=init[k]);
+$("sampleTag").hidden=!!saved;
+
+function compute(inp){
+  const ce=inp.y-543, [hh,mm]=(inp.t||"12:00").split(":").map(Number);
+  const birth=new Date(ce,inp.m-1,inp.d,hh,mm);
+  const js=birth.getDay();
+  const dayNum= hh<6 ? ((js+6)%7)+1 : js+1;     // Thai day changes at sunrise
+  const night= hh>=18||hh<6;
+  const taksaDay=(dayNum===4&&night)?8:dayNum;
+  const zy=(inp.m<4||(inp.m===4&&inp.d<13))?ce-1:ce; // zodiac changes at Songkran
+  const animal=((zy-4)%12+12)%12;
+  const lunar=(inp.m%12)+1;                       // approx: ธ.ค.=อ้าย
+  const row=(s,mod,n)=>Array.from({length:n},(_,i)=>((s-1+i)%mod)+1);
+  const b1=row(dayNum,7,7), b2=row(((lunar-1)%7)+1,7,7), b3=row((animal%7)+1,7,7);
+  const b4=b1.map((v,i)=>v+b2[i]+b3[i]);
+  const g1=row(dayNum,7,12), g2=row(lunar,12,12), g3=row(animal+1,12,12);
+  const g=g1.map((v,i)=>v+g2[i]+g3[i]);
+  const lifePct=age=>Math.round(g[((age%12)+12)%12]/31*100);
+  const periods=[]; let t=birth.getTime(), idx=TAKSA_ORDER.indexOf(taksaDay), elapsed=0;
+  while(elapsed<120){
+    const M=TAKSA_ORDER[idx%8], Y=TAKSA_YRS[M], subs=[]; let st=t;
+    for(let k=0;k<8;k++){const S=TAKSA_ORDER[(idx+k)%8], len=Y*TAKSA_YRS[S]/108*YEAR_MS; subs.push({p:S,s:st,e:st+len}); st+=len;}
+    periods.push({p:M,s:t,e:t+Y*YEAR_MS,a0:elapsed,a1:elapsed+Y,subs});
+    t+=Y*YEAR_MS; elapsed+=Y; idx++;
+  }
+  const findAt=time=>{for(const P of periods)if(time>=P.s&&time<P.e){for(const S of P.subs)if(time>=S.s&&time<S.e)return{M:P.p,S:S.p};return{M:P.p,S:P.p}}return{M:taksaDay,S:taksaDay}};
+  const tce=inp.ty-543, months=[];
+  for(let mo=0;mo<12;mo++){
+    const mid=new Date(tce,mo,15);
+    let age=tce-ce; if(mo+1<inp.m||(mo+1===inp.m&&15<inp.d))age--;
+    const col=((age+mo)%7+7)%7;
+    const at=findAt(mid.getTime());
+    let sc=100*(.4*(b4[col]-3)/18+.35*Q[at.S]+.15*Q[at.M]+.10*lifePct(age)/100);
+    sc=Math.max(15,Math.min(96,Math.round(sc)));
+    const doms=DOM.map((d,i)=>{
+      const c=(d.h+col)%7, p=((b4[c]-1)%7)+1;
+      const s=.5*(b4[c]-3)/18+.5*Q[p]+.2*(Q[at.S]-.5);
+      const g=s>=.5?0:1;
+      const src=d.k==="love"?LOVE[inp.st]:{work:WORK,money:MONEY,health:HEALTH}[d.k];
+      return {k:d.k,n:d.n,house:H2[c],p,s,txt:src[p][g],tip:TIPS[d.k][g][(p+mo)%3],per:PERIOD[(p+mo+i)%3]};
+    });
+    months.push({mo,age,col,score:sc,M:at.M,S:at.S,doms});
+  }
+  return {ce,dayNum,taksaDay,animal,lunar,b1,b2,b3,b4,lifePct,periods,months,ageY:tce-ce,tce};
+}
+
+function level(s){return s>=68?["ดีมาก","lv-a","var(--good)"]:s>=55?["ดี","lv-b","var(--ok)"]:s>=42?["ปานกลาง","lv-c","var(--mid)"]:["ควรระวัง","lv-d","var(--bad)"]}
+function dLevel(s){return s>=.62?["ดี","lv-a"]:s>=.45?["กลาง","lv-c"]:["ระวัง","lv-d"]}
+
+function overview(m){
+  const lv=level(m.score)[0], sorted=[...m.doms].sort((a,b)=>b.s-a.s), best=sorted[0], worst=sorted[3];
+  const tone=m.score>=68?"จังหวะดี เหมาะเริ่มต้นหรือผลักดันเรื่องสำคัญ":m.score>=55?"ไปได้ดีถ้าวางแผนชัดเจน":m.score>=42?"ทรงตัว ควรค่อยเป็นค่อยไป":"มีแรงกดดัน ควรตั้งรับและไม่ประมาท";
+  return `ดวงภาพรวมระดับ${lv} ${tone} ดาว${PLANET[m.S]}แทรกนำเรื่อง${KW[m.S]}เข้ามา ดวงจรผ่านเรือน${H1[m.col]} จึงเน้นเรื่อง${FOCUS[m.col]} เรื่องที่เด่นที่สุดคือ${best.n} ส่วนที่ควรใส่ใจคือ${worst.n}`;
+}
+
+function render(inp){
+  const r=compute(inp);
+  const now=new Date(), hlCol=r.months[r.tce===now.getFullYear()?now.getMonth():0].col;
+  const midT=new Date(r.tce,6,1).getTime(), nowP=r.periods.find(P=>midT>=P.s&&midT<P.e);
+  $("facts").innerHTML=[
+    ["วันเกิดแบบไทย","วัน"+DAY[r.taksaDay===8?8:r.dayNum]],
+    ["ปีนักษัตร","ปี"+ANIMAL[r.animal]],
+    ["เดือนจันทรคติ (ประมาณ)","เดือน"+LUNAR[r.lunar-1]],
+    ["ดาวประจำตัว (ทักษา)",PLANET[r.taksaDay]],
+    ["อายุในปี "+inp.ty,r.ageY+" ปี"],
+    ["ดาวเสวยปีนี้",nowP?PLANET[nowP.p]:"-"]
+  ].map(([k,v])=>`<div class="fact"><b>${v}</b><span>${k}</span></div>`).join("");
+  $("moTitle").textContent="ดวงรายเดือน ปี "+inp.ty+" · "+(inp.st==="single"?"โสด":"มีคนรักแล้ว");
+  const W=640,Hh=200,pl=34,pb=26,pt=14,bw=(W-pl-8)/12;
+  let sv=`<svg viewBox="0 0 ${W} ${Hh}" width="100%" role="img" aria-label="คะแนนดวงรายเดือน">`;
+  [0,25,50,75,100].forEach(v=>{const y=pt+(Hh-pt-pb)*(1-v/100);sv+=`<line x1="${pl}" x2="${W-6}" y1="${y}" y2="${y}" stroke="var(--line)" stroke-width="1"/><text x="${pl-6}" y="${y+4}" text-anchor="end" font-size="11" fill="var(--muted)">${v}</text>`});
+  r.months.forEach((m,i)=>{const h=(Hh-pt-pb)*m.score/100,x=pl+i*bw+bw*.18,y=Hh-pb-h,c=level(m.score)[2];
+    sv+=`<rect x="${x}" y="${y}" width="${bw*.64}" height="${h}" rx="3" fill="${c}"/><text x="${x+bw*.32}" y="${y-4}" text-anchor="middle" font-size="11" fill="var(--ink)">${m.score}</text><text x="${x+bw*.32}" y="${Hh-8}" text-anchor="middle" font-size="11" fill="var(--muted)">${TH_MON_S[i]}</text>`});
+  $("moChart").innerHTML=sv+"</svg>";
+  $("months").innerHTML=r.months.map(m=>{
+    const [lv,cls,c]=level(m.score), best=[...m.doms].sort((a,b)=>b.s-a.s)[0];
+    return `<article class="mo">
+      <div class="mo-top"><h3>${TH_MONTH[m.mo]}</h3><span class="score">${m.score}/100</span></div>
+      <div class="bar"><i style="width:${m.score}%;background:${c}"></i></div>
+      <div><span class="pill ${cls}">${lv}</span></div>
+      <p class="over">${overview(m)}</p>
+      <div class="doms">${m.doms.map(d=>{const [l,k]=dLevel(d.s);
+        return `<div class="dom"><h4>${d.n}${d.k==="love"?(inp.st==="single"?" (โสด)":" (มีคู่)"):""}<span class="pill ${k}">${l}</span><span class="by">ดาว${PLANET[d.p]} · เรือน${d.house}</span></h4>
+          <p>${d.txt}</p><p class="tip"><b>${d.per}:</b> ${d.tip}</p></div>`}).join("")}</div>
+      <div class="lucky"><span>สีมงคล <b>${COLOR[best.p]}</b></span><span>วันดี <b>วัน${DAY[best.p]}</b></span><span>อายุ <b>${m.age}</b></span></div>
+      </article>`}).join("");
+  const cell=(v,i,houses)=>`<td class="num${i===hlCol?" hl":""}">${thNum(v)}${houses?`<span class="house">${houses[i]}</span>`:""}</td>`;
+  $("t7").innerHTML=`<thead><tr><th>ฐาน</th>${H1.map((_,i)=>`<th>ช่อง ${i+1}</th>`).join("")}</tr></thead><tbody>
+   <tr><th>1 วัน</th>${r.b1.map((v,i)=>cell(v,i,H1)).join("")}</tr>
+   <tr><th>2 เดือน</th>${r.b2.map((v,i)=>cell(v,i,H2)).join("")}</tr>
+   <tr><th>3 ปี</th>${r.b3.map((v,i)=>cell(v,i,H3)).join("")}</tr>
+   <tr><th>4 รวม</th>${r.b4.map((v,i)=>cell(v,i,null)).join("")}</tr></tbody>`;
+  const LW=760,LH=220,lpl=34,lpb=28,lpt=18,maxA=84,x=a=>lpl+(LW-lpl-10)*(a-1)/(maxA-1),y=v=>lpt+(LH-lpt-lpb)*(1-v/100);
+  let lg=`<svg viewBox="0 0 ${LW} ${LH}" width="100%" role="img" aria-label="กราฟชีวิตตามอายุ">`;
+  [0,50,100].forEach(v=>lg+=`<line x1="${lpl}" x2="${LW-10}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${lpl-6}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="var(--muted)">${v}%</text>`);
+  for(let a=12;a<=84;a+=12)lg+=`<line x1="${x(a)}" x2="${x(a)}" y1="${lpt}" y2="${LH-lpb}" stroke="var(--line)" stroke-dasharray="3 4"/><text x="${x(a)}" y="${LH-8}" text-anchor="middle" font-size="11" fill="var(--muted)">${a}</text>`;
+  const pts=[];for(let a=1;a<=maxA;a++)pts.push(`${x(a).toFixed(1)},${y(r.lifePct(a)).toFixed(1)}`);
+  lg+=`<polygon points="${x(1)},${y(0)} ${pts.join(" ")} ${x(maxA)},${y(0)}" fill="var(--indigo)" opacity=".12"/><polyline points="${pts.join(" ")}" fill="none" stroke="var(--indigo)" stroke-width="2"/>`;
+  if(r.ageY>=1&&r.ageY<=maxA){const v=r.lifePct(r.ageY);lg+=`<circle cx="${x(r.ageY)}" cy="${y(v)}" r="5.5" fill="var(--gold)" stroke="var(--surface)" stroke-width="2"/><text x="${x(r.ageY)}" y="${Math.max(12,y(v)-10)}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--gold)">อายุ ${r.ageY} · ${v}%</text>`}
+  $("lg").innerHTML=lg+"</svg>";
+  $("tl").innerHTML=r.periods.filter(P=>P.a0<90).map(P=>{const isNow=midT>=P.s&&midT<P.e;
+    return `<div class="tl-row${isNow?" now":""}"><span class="yrs">อายุ ${Math.floor(P.a0)}–${Math.floor(P.a1)}</span><span>ดาว${PLANET[P.p]} เสวย ${TAKSA_YRS[P.p]} ปี · ${KW[P.p]}</span></div>`}).join("");
+}
+
+$("f").addEventListener("submit",e=>{e.preventDefault();
+  const inp={d:+$("d").value,m:+$("m").value,y:+$("y").value,t:$("t").value||"12:00",st:$("st").value,ty:+$("ty").value};
+  if(!inp.y||inp.y<2440||!inp.ty){$("y").focus();return}
+  try{localStorage.setItem("duang3",JSON.stringify(inp))}catch(err){}
+  $("sampleTag").hidden=true; render(inp);
+});
+$("st").addEventListener("change",()=>$("f").requestSubmit());
+render(init);
+})();
+</script>
